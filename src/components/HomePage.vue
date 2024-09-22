@@ -1,22 +1,27 @@
 <template>
   <div>
-    <h1>Welcome on the home page !</h1>
-    <p>Here is the content.</p>
+    <h1>Welcome to the Home Page!</h1>
+    <base-button @click="handleClick">Click Me</base-button>
+    <base-button :disabled="true">Disabled Button</base-button>
   </div>
 </template>
 
 <script>
+import BaseButton from './BaseButton.vue';
+
 export default {
   name: 'HomePage',
+  components: {
+    BaseButton,
+  },
+  methods: {
+    handleClick() {
+      alert('Button clicked!');
+    },
+  },
 };
 </script>
 
 <style scoped>
-h1 {
-  color: #42b983;
-}
 
-p {
-  font-size: 16px;
-}
 </style>
