@@ -31,7 +31,7 @@ export default {
   methods: {
     handleClick(event) {
       if (this.disabled) {
-        event.preventDefault(); // Empêche l'action si désactivé
+        event.preventDefault();
       } else {
         this.$emit('click');
       }
@@ -72,6 +72,6 @@ export default {
 
 .is-disabled {
   background-color: #ccc;
-  cursor: not-allowed; /* Panneau interdit */
+  cursor: not-allowed;
 }
 </style>
