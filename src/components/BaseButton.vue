@@ -1,6 +1,6 @@
 <template>
   <button
-      :class="['base-button', { 'is-disabled': disabled }]"
+      :class="['base-button', colorClass, { 'is-disabled': disabled }]"
       :style="buttonStyle"
       :role="role"
       :disabled="disabled"
@@ -17,6 +17,16 @@ export default {
     role: { type: String, default: 'button' },
     buttonStyle: { type: Object, default: () => ({}) },
     disabled: { type: Boolean, default: false },
+    color: {
+      type: String,
+      default: 'primary',
+      validator: value => ['primary', 'warn', 'danger'].includes(value),
+    },
+  },
+  computed: {
+    colorClass() {
+      return `button-${this.color}`;
+    },
   },
   methods: {
     handleClick(event) {
@@ -32,22 +42,35 @@ export default {
 
 <style scoped>
 .base-button {
-  background-color: #42b983;
-  color: white;
+    color: white;
   border: none;
   border-radius: 5px;
   padding: 10px 20px;
   cursor: pointer;
   transition: transform 0.2s;
-  margin-left: 10px;
-  margin-right: 10px;
 }
 
-.base-button:hover {
+.button-primary {
+  background-color: #42b983;
+}
+
+.button-warn {
+  background-color: #ff5722;
+}
+
+.button-danger {
+  background-color: #e53935;
+}
+
+.base-button:hover:not(.is-disabled) {
   transform: scale(1.05);
 }
 
-.base-button.is-disabled {
+.base-button:focus {
+  outline: 2px solid;
+}
+
+.is-disabled {
   background-color: #ccc;
   cursor: not-allowed; /* Panneau interdit */
 }
