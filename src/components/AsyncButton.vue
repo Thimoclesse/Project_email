@@ -1,8 +1,7 @@
 <template>
   <base-button
       :disabled="isPending"
-      :color="color"
-      @click="handleClick" >
+      :color="color">
     <slot />
   </base-button>
 </template>
@@ -23,13 +22,6 @@ export default {
     return {
       isPending: false,
     };
-  },
-  methods: {
-    async handleClick() {
-      this.isPending = true;
-      await this.$emit('click');
-      this.isPending = false;
-    },
   },
 };
 </script>

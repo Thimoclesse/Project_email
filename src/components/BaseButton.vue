@@ -4,7 +4,7 @@
       :style="buttonStyle"
       :role="role"
       :disabled="disabled"
-      @click="handleClick"
+
   >
     <slot />
   </button>
@@ -28,21 +28,12 @@ export default {
       return `button-${this.color}`;
     },
   },
-  methods: {
-    handleClick(event) {
-      if (this.disabled) {
-        event.preventDefault();
-      } else {
-        this.$emit('click');
-      }
-    },
-  },
 };
 </script>
 
 <style scoped>
 .base-button {
-    color: white;
+  color: white;
   border: none;
   border-radius: 5px;
   padding: 10px 20px;
