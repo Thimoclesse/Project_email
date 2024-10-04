@@ -39,6 +39,8 @@ export default {
   padding: 10px 20px;
   cursor: pointer;
   transition: transform 0.2s;
+  margin-right: 1rem;
+  margin-left: 1rem;
 }
 
 .button-primary {

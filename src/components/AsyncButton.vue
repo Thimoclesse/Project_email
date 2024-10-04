@@ -1,8 +1,15 @@
 <template>
   <base-button
-      :disabled="isPending"
-      :color="color">
-    <slot />
+      :disabled="isDisabled"
+      :color="color" >
+    <template v-if="isPending">
+      <!-- Affiche la roue de chargement pendant l'attente -->
+      <span class="spinner"></span> Loading...
+    </template>
+    <template v-else>
+      <!-- Contenu du bouton quand non en attente -->
+      <slot />
+    </template>
   </base-button>
 </template>
 
@@ -17,15 +24,34 @@ export default {
       type: String,
       default: 'primary',
     },
+    isDisabled: {
+      type: Boolean,
+      default: false,
+    },
+    isPending: {
+      type: Boolean,
+      default: false,
+    },
   },
-  data() {
-    return {
-      isPending: false,
-    };
+  methods: {
+
   },
 };
 </script>
 
 <style scoped>
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top-color: #2c3e50;
+  width: 1rem;
+  height: 1rem;
+  animation: spin 1s linear infinite;
+  margin-right: 1rem;
+}
 
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 </style>
