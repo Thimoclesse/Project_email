@@ -4,7 +4,6 @@
       :style="buttonStyle"
       :role="role"
       :disabled="disabled"
-
   >
     <slot />
   </button>

@@ -14,18 +14,21 @@
     <base-button @click="handleClick" color="warn">Warning Button</base-button>
     <base-button @click="handleClick" color="danger">Danger Button</base-button>
     <base-button :disabled="true">Disabled Button</base-button>
+    <sign-in-button>Sign in</sign-in-button>
   </div>
 </template>
 
 <script>
 import BaseButton from './BaseButton.vue';
 import AsyncButton from './AsyncButton.vue';
+import SignInButton from './SignInButton.vue'
 
 export default {
   name: 'HomePage',
   components: {
     BaseButton,
     AsyncButton,
+    SignInButton
   },
   data() {
     return {
@@ -58,5 +61,5 @@ export default {
 </script>
 
 <style scoped>
-/* Tu peux ajouter du style ici si nécessaire */
+
 </style>
