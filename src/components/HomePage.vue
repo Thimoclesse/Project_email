@@ -1,7 +1,15 @@
 <template>
   <div>
     <h1>Welcome to the Home Page!</h1>
-    <!-- AsyncButton sans spinner -->
+
+    <div v-if="currentUser">
+      <p>User Name : {{ currentUser.name }}</p>
+      <p>Email : {{ currentUser.username }}</p>
+    </div>
+    <div v-else>
+      <p>Please sign in.</p>
+    </div>
+
     <async-button
         :isDisabled="isPending"
         @click="handleAsyncClick"
@@ -10,11 +18,10 @@
       Click Me
     </async-button>
 
-    <!-- Autres boutons de base pour démonstration -->
     <base-button @click="handleClick" color="warn">Warning Button</base-button>
     <base-button @click="handleClick" color="danger">Danger Button</base-button>
     <base-button :disabled="true">Disabled Button</base-button>
-    <sign-in-button>Sign in</sign-in-button>
+    <sign-in-button @userChanged="setUser">Sign in</sign-in-button>
   </div>
 </template>
 
@@ -30,10 +37,17 @@ export default {
     AsyncButton,
     SignInButton
   },
+  props: {
+    user: {
+      type: Object,
+      default: null
+    }
+  },
   data() {
     return {
-      isPending: false, // Etat pour gérer le loading
+      isPending: false,
       duration: 0,
+      currentUser: null,
     };
   },
   methods: {
@@ -41,21 +55,21 @@ export default {
       alert('Button clicked!');
     },
     async handleAsyncClick() {
-      // Quand on clique, le bouton devient pending (désactivé)
 
       this.isPending = true;
       this.duration += 2
-      // Simuler une opération asynchrone (par exemple une requête réseau)
       await new Promise((resolve) => {
         setTimeout(() => {
           alert('Async button clicked!');
           resolve();
-        }, this.duration*1000); // 2 secondes d'attente
+        }, this.duration*1000);
       });
 
-      // Réactiver le bouton une fois l'opération terminée
       this.isPending = false;
     },
+    setUser(user){
+      this.currentUser = user;
+    }
   },
 };
 </script>

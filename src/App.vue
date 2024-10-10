@@ -1,6 +1,6 @@
 <template>
   <base-layout>
-    <home-page />
+    <home-page :user="user" @userChanged="handleUserChange"/>
   </base-layout>
 </template>
 
@@ -14,6 +14,16 @@ export default {
     HomePage,
     BaseLayout,
   },
+  data(){
+    return {
+      user: null,
+    };
+  },
+  methods: {
+    handleUserChange(newUser){
+      this.user = newUser;
+    }
+  }
 };
 </script>
 

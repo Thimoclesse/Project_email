@@ -1,17 +1,23 @@
 <template>
-  <button @click="handleClick"><slot></slot></button>
+  <button @click="handleClick"><slot/></button>
 </template>
 
 <script>
-import { signInAndGetUser } from '@/lib/microsoftGraph'
+import { signInAndGetUser } from '@/lib/microsoftGraph';
 
 export default {
-  name: 'BaseButton',
+  name: 'SignInButton',
   methods: {
     async handleClick() {
       try {
         const user = await signInAndGetUser();
         console.log('User Info:', user);
+        console.log(user.name)
+        console.log(user.username)
+
+
+        // Émettre l'objet user directement
+        this.$emit('userChanged', user); // Émet l'événement avec l'utilisateur connecté
       } catch (error) {
         console.error('Error during sign-in:', error);
       }
