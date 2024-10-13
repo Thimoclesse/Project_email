@@ -4,10 +4,14 @@
 
 <script>
 import { signInAndGetUser } from '@/lib/microsoftGraph';
+import { mapMutations } from 'vuex';
+
 
 export default {
   name: 'SignInButton',
   methods: {
+    ...mapMutations(['setUser']),
+
     async handleClick() {
       try {
         const user = await signInAndGetUser();
@@ -15,9 +19,7 @@ export default {
         console.log(user.name)
         console.log(user.username)
 
-
-        // Émettre l'objet user directement
-        this.$emit('userChanged', user); // Émet l'événement avec l'utilisateur connecté
+        this.setUser(user);
       } catch (error) {
         console.error('Error during sign-in:', error);
       }

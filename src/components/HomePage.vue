@@ -2,9 +2,9 @@
   <div>
     <h1>Welcome to the Home Page!</h1>
 
-    <div v-if="currentUser">
-      <p>User Name : {{ currentUser.name }}</p>
-      <p>Email : {{ currentUser.username }}</p>
+    <div v-if="user">
+      <p>User Name : {{ user.name }}</p>
+      <p>Email : {{ user.username }}</p>
     </div>
     <div v-else>
       <p>Please sign in.</p>
@@ -21,14 +21,15 @@
     <base-button @click="handleClick" color="warn">Warning Button</base-button>
     <base-button @click="handleClick" color="danger">Danger Button</base-button>
     <base-button :disabled="true">Disabled Button</base-button>
-    <sign-in-button @userChanged="setUser">Sign in</sign-in-button>
+    <sign-in-button>Sign in</sign-in-button>
   </div>
 </template>
 
 <script>
 import BaseButton from './BaseButton.vue';
 import AsyncButton from './AsyncButton.vue';
-import SignInButton from './SignInButton.vue'
+import SignInButton from './SignInButton.vue';
+import { mapGetters } from 'vuex'; // Importation de mapGetters pour utiliser les getters du store
 
 export default {
   name: 'HomePage',
@@ -37,17 +38,16 @@ export default {
     AsyncButton,
     SignInButton
   },
-  props: {
-    user: {
-      type: Object,
-      default: null
+  computed: {
+    ...mapGetters(['currentUser']), // Récupère l'utilisateur depuis Vuex
+    user() {
+      return this.currentUser; // Alias pour l'utilisateur courant
     }
   },
   data() {
     return {
       isPending: false,
       duration: 0,
-      currentUser: null,
     };
   },
   methods: {
@@ -55,25 +55,19 @@ export default {
       alert('Button clicked!');
     },
     async handleAsyncClick() {
-
       this.isPending = true;
-      this.duration += 2
+      this.duration += 2;
       await new Promise((resolve) => {
         setTimeout(() => {
           alert('Async button clicked!');
           resolve();
-        }, this.duration*1000);
+        }, this.duration * 1000);
       });
-
       this.isPending = false;
-    },
-    setUser(user){
-      this.currentUser = user;
     }
-  },
+  }
 };
 </script>
 
 <style scoped>
-
 </style>
