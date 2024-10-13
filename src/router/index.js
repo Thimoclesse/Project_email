@@ -1,7 +1,8 @@
 import HomePage from '../components/HomePage.vue';
 import ConversationsIndexPage from '../components/ConversationsIndexPage.vue';
+import ConversationShowPage from '../components/ConversationShowPage.vue';
 import { createRouter, createWebHistory } from 'vue-router';
-import store from '../store'; // Import the Vuex store
+import store from '../store';
 
 const routes = [
     {
@@ -23,6 +24,11 @@ const routes = [
                 next();
             }
         },
+    },
+    {
+        path: '/conversations/:id',
+        name: 'ConversationShow',
+        component: ConversationShowPage,
     },
 ];
 
