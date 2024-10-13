@@ -29,7 +29,7 @@
 import BaseButton from './BaseButton.vue';
 import AsyncButton from './AsyncButton.vue';
 import SignInButton from './SignInButton.vue';
-import { mapGetters } from 'vuex'; // Importation de mapGetters pour utiliser les getters du store
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'HomePage',
@@ -39,9 +39,9 @@ export default {
     SignInButton
   },
   computed: {
-    ...mapGetters(['currentUser']), // Récupère l'utilisateur depuis Vuex
+    ...mapGetters(['currentUser']),
     user() {
-      return this.currentUser; // Alias pour l'utilisateur courant
+      return this.currentUser;
     }
   },
   data() {
@@ -70,4 +70,5 @@ export default {
 </script>
 
 <style scoped>
+
 </style>

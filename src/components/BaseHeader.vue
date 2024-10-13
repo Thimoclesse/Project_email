@@ -1,16 +1,28 @@
 <template>
   <header>
-    <nav>
-      <a href="#">Home</a>
-      <a href="#">History</a>
-      <span>User</span>
+    <nav class="nav-links">
+      <router-link to="/" class="conversations-link">Home</router-link>
+      <div v-if="user">
+        <router-link to="/conversations" class="conversations-link">Go to Conversations</router-link>
+      </div>
+      <span>User: {{ user ? user.name : 'Not logged in' }}</span>
+
     </nav>
   </header>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'; // Importation de mapGetters
+
+
 export default {
   name: 'BaseHeader',
+  computed: {
+    ...mapGetters(['currentUser']), // Récupérer l'utilisateur depuis Vuex
+    user() {
+      return this.currentUser; // Alias pour l'utilisateur courant
+    }
+  }
 };
 </script>
 
@@ -21,9 +33,20 @@ header {
   text-align: center;
 }
 
-nav a {
-  margin: 0 15px;
+.nav-links {
+  display: flex; /* Utilisation de flexbox pour aligner les éléments horizontalement */
+  justify-content: center; /* Centrer les éléments */
+  align-items: center; /* Aligner les éléments verticalement */
+}
+
+
+.conversations-link {
+  display: inline-block;
+  margin: 1rem;
+  color: white;
+  background-color: orange;
+  padding: 0.7rem;
+  border-radius: 0.5rem;
   text-decoration: none;
-  color: #333;
 }
 </style>
