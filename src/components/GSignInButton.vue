@@ -1,6 +1,5 @@
 <template>
   <div v-if="loggedIn">
-    <button @click="logout">Logout</button>
   </div>
   <div v-else>
     <GoogleLogin :callback="callback" prompt auto-login />
@@ -32,7 +31,7 @@ export default {
           provider: 'Google',                // Fournisseur (ici Google)
         };
 
-        console.log('User Info:', normalizedUser);
+        // console.log('User Info:', normalizedUser);
 
         // Appeler la mutation pour stocker l'utilisateur dans le store
         this.setUser(normalizedUser);
@@ -51,5 +50,4 @@ export default {
 </script>
 
 <style scoped>
-/* Ajoute tes styles ici si nécessaire */
 </style>
