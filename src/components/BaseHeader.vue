@@ -1,9 +1,10 @@
 <template>
   <header>
     <nav class="nav-links">
-      <router-link to="/" class="conversations-link">Home</router-link>
+      <router-link to="/" class="mail-link">Home</router-link>
       <div v-if="user">
-        <router-link to="/conversations" class="conversations-link">Go to Conversations</router-link>
+        <router-link to="/mail" class="mail-link">Show your email</router-link>
+        <router-link to="/create" class="mail-link">Create email</router-link>
       </div>
       <span>User: {{ user ? user.name : 'Not logged in' }}</span>
 
@@ -40,7 +41,7 @@ header {
 }
 
 
-.conversations-link {
+.mail-link {
   display: inline-block;
   margin: 1rem;
   color: white;
