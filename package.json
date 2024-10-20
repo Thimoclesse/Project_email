@@ -13,6 +13,7 @@
     "vue": "^3.2.13",
     "vue-oauth-microsoft-graph": "file:",
     "vue-router": "^4.4.5",
+    "vue3-google-login": "^2.0.33",
     "vuex": "^4.1.0"
   },
   "devDependencies": {
