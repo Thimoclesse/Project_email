@@ -1,6 +1,6 @@
-import HomePage from '../components/HomePage.vue';
-import ConversationsIndexPage from '../components/ConversationsIndexPage.vue';
-import ConversationShowPage from '../components/ConversationShowPage.vue';
+import HomePage from '../pages/HomePage.vue';
+import ConversationsIndexPage from '../pages/ConversationsIndexPage.vue';
+import ConversationShowPage from '../pages/ConversationShowPage.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import store from '../store';
 
