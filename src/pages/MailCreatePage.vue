@@ -45,12 +45,9 @@
           ...this.email,
           date: formattedDate,
           heure: formattedTime,
-          userId: currentUser.tenantId,  // Associer l'email à l'utilisateur connecté
+          userId: currentUser.id,  // Associer l'email à l'utilisateur connecté
           id: Date.now()
         };
-        console.log(currentUser)
-        console.log(newEmail)
-  
         this.$store.dispatch('addEmail', newEmail);
         this.$router.push({ name: 'MailIndex' });
       }
