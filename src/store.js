@@ -18,10 +18,13 @@ export default createStore({
     addEmail(state, email) {
       // Normaliser l'email
       const normalizedEmail = {
-        id: email.id,             // ID de l'email
-        subject: email.subject,   // Sujet de l'email
-        body: email.body,         // Corps de l'email
-        userId: state.user?.id,   // ID de l'utilisateur auquel appartient l'email
+        id: email.id,
+        destinataire : email.destinataire,
+        objet: email.objet, 
+        content: email.content, 
+        heure: email.heure, 
+        date: email.date, 
+        userId: email.userId,
       };
       state.emails.push(normalizedEmail);  // Ajouter le nouvel email normalisé
     },

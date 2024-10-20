@@ -2,8 +2,8 @@
     <div class="email-item">
       <router-link :to="{ name: 'MailShow', params: { id: email.id } }" class="email-link">
         <div class="email-details">
-          <div class="email-subject">{{ email.objet }}</div>
           <div class="email-recipient">{{ email.destinataire }}</div>
+          <div class="email-subject">{{ email.objet }}</div>
           <div class="email-preview">{{ email.content.substring(0, 30) }}...</div> <!-- Affiche les 30 premiers caractères -->
           <div class="email-timestamp">{{ email.date }} - {{ email.heure }}</div>
         </div>
