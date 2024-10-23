@@ -50,11 +50,12 @@ export async function signInAndGetUser() {
     };
 }
 
+
 /**
  * Fonction pour récupérer les emails de l'utilisateur
  * @param {string} accessToken - Le jeton d'accès de l'utilisateur
  */
-async function fetchUserEmails(accessToken) {
+export async function fetchUserEmails(accessToken) {
     try {
         const response = await axios.get(`${GRAPH_API_BASE_URL}/me/messages`, {
             headers: {

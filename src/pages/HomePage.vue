@@ -42,9 +42,11 @@ export default {
   methods: {
     // Mapping mutations to update the user state in Vuex
     ...mapMutations(['setUser']),
-    logout() {
+    async logout() {
       // Log the user out and clear the current user from the store
       this.setUser(null);
+      await this.$store.dispatch('resetUserData'); // Réinitialiser l'état
+      console.log('Utilisateur déconnecté et état réinitialisé.');
     }
   }
 };

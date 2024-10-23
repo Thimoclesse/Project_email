@@ -4,6 +4,7 @@ export default createStore({
   state: {
     user: null,  // Initialize user as null by default
     emails: [],  // List of normalized emails
+    accessToken: null, // Assurez-vous que accessToken est dans l'état
   },
   mutations: {
     setUser(state, user) {
@@ -16,18 +17,24 @@ export default createStore({
       // Normalize the email
       const normalizedEmail = {
         id: email.id,
-        object: email.object, // Changer destinataire en subject
-        destinataire : email.destinataire ,  
-        content  : email.content,   // Changer content en from
-        receivedDateTime: email.receivedDateTime, // Changer date
+        object: email.object,
+        destinataire : email.destinataire,  
+        content  : email.content,
+        receivedDateTime: email.receivedDateTime,
         webLink: email.webLink,
-        userId: email.userId,   // Garder le userId pour le filtrage
+        userId: email.userId,
       };
       state.emails.push(normalizedEmail);  // Add the new normalized email
     },
     deleteEmail(state, emailId) {
       // Remove the email
       state.emails = state.emails.filter(email => email.id !== emailId);
+    },
+    resetState(state) {
+      // Reset user and emails to their initial state
+      state.user = null;
+      state.emails = [];
+      state.accessToken = null; // Réinitialiser le token d'accès également
     }
   },
   actions: {
@@ -39,11 +46,14 @@ export default createStore({
     },
     deleteEmail({ commit }, emailId) {
       commit('deleteEmail', emailId);  // Call the mutation to delete the email
+    },
+    resetUserData({ commit }) {
+      commit('resetState'); // Appelle la mutation pour réinitialiser l'état
     }
   },
   getters: {
-    currentUser: state => state.user,  // Get the current user
-    getaccessToken: state => state.accessToken, // Récupère le token d'accès
+    currentUser: state => state.user,
+    getaccessToken: state => state.accessToken,
 
     userEmails: (state) => {
       return state.emails.filter(email => email.userId === state.user?.id);

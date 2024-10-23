@@ -1,7 +1,10 @@
 <template>
   <div>
     <h1>Vos Emails</h1>
-    
+
+    <!-- Bouton d'actualisation -->
+    <button @click="refreshEmails" class="refresh-button">Actualiser</button>
+
     <!-- Barre de recherche -->
     <div class="search-bar">
       <label for="search">Rechercher des emails :</label>
@@ -9,7 +12,7 @@
       <label for="date">Date :</label>
       <input type="date" v-model="searchDate" class="date-input"/>
     </div>
-    
+
     <!-- Sélecteur de nombre d'emails à afficher -->
     <div class="limit-selector">
       <label for="limit">Nombre d'emails à afficher :</label>
@@ -37,8 +40,10 @@
   </div>
 </template>
 
+
 <script>
 import EmailItem from './../components/EmailItem.vue'; // Assurez-vous d'importer le composant
+import { fetchUserEmails } from './../lib/microsoftGraph.js'; // Importez la fonction
 
 export default {
   name: 'MailIndexPage',
@@ -91,10 +96,16 @@ export default {
     handleDeleteEmail(emailId) {
       // Ici, vous pouvez appeler une action Vuex pour supprimer l'email, ou le supprimer directement
       this.$store.dispatch('deleteEmail', emailId); // Assurez-vous que cette action existe
+    },
+    async refreshEmails() {
+      const accessToken = this.$store.getters.getaccessToken; // Récupérer le token d'accès
+      await fetchUserEmails(accessToken); // Appeler la fonction pour récupérer les emails
+      console.log('Emails rafraîchis avec succès');
     }
   }
 };
 </script>
+
 
 <style scoped>
 /* Style de la barre de recherche */
@@ -170,5 +181,19 @@ export default {
   border-radius: 0.5rem; /* Coins arrondis */
   text-align: center; /* Centrer le texte */
   margin: 1rem 0; /* Marge pour l'espacement */
+}
+
+.refresh-button {
+  padding: 0.5rem;
+  background-color: orange;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  margin-bottom: 1rem; /* Espacement sous le bouton */
+}
+
+.refresh-button:hover {
+  background-color: darkorange; /* Changer la couleur au survol */
 }
 </style>
