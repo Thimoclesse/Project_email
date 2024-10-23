@@ -60,17 +60,27 @@ export default {
     filteredEmails() {
       // Filtrer les emails selon le terme de recherche et la date
       const filtered = this.userEmails.filter(email => {
-        const matchesTerm = this.searchTerm ? 
-          email.objet.toLowerCase().includes(this.searchTerm.toLowerCase()) || 
-          email.destinataire.toLowerCase().includes(this.searchTerm.toLowerCase()) : true;
+        const normalizedEmail = {
+          id: email.id,
+          subject: email.object, // Utilisation de subject au lieu de object
+          destinataire: email.destinataire,  
+          content: email.content,   
+          receivedDateTime: email.receivedDateTime,
+          webLink: email.webLink,
+          userId: email.userId,
+        };
 
-        const matchesDate = this.searchDate ? email.date === this.searchDate : true;
+        const matchesTerm = this.searchTerm ? 
+          normalizedEmail.subject.toLowerCase().includes(this.searchTerm.toLowerCase()) || 
+          normalizedEmail.destinataire.toLowerCase().includes(this.searchTerm.toLowerCase()) : true;
+
+        const matchesDate = this.searchDate ? normalizedEmail.receivedDateTime.startsWith(this.searchDate) : true;
 
         return matchesTerm && matchesDate; // Retourner vrai si les deux conditions sont satisfaites
       });
 
       // Trier les emails du plus récent au plus ancien
-      return filtered.sort((a, b) => new Date(b.date + 'T' + b.heure) - new Date(a.date + 'T' + a.heure));
+      return filtered.sort((a, b) => new Date(b.receivedDateTime) - new Date(a.receivedDateTime));
     },
     limitedEmails() {
       // Limiter le nombre d'emails affichés
