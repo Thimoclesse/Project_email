@@ -4,7 +4,7 @@ import store from './store';
 import router from './router'; // Import the router
 import vue3GoogleLogin from 'vue3-google-login';
 
-const CLIENT_ID = "42721855293-7h66ak5gcspj2cpvogs8or479uvbbnsk.apps.googleusercontent.com";
+const CLIENT_ID = "708821429965-5b71hdidft6pif1nqukbii2smfa4a0ef.apps.googleusercontent.com";
 
 createApp(App)
     .use(store)

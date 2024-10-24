@@ -13,7 +13,7 @@ const requestedScopes = {
 
 const msalInstance = new msal.PublicClientApplication({
     auth: {
-        clientId: process.env.VUE_APP_OAUTH_CLIENT_ID // Assurez-vous que le client ID est défini dans vos variables d'environnement
+        clientId: "e8137439-4d1d-462d-a85f-f81cfea8f0d8" // Assurez-vous que le client ID est défini dans vos variables d'environnement
     },
     cache: {
         cacheLocation: "sessionStorage" // Utilisation du stockage de session pour la mise en cache des tokens
