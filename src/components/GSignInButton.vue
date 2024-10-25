@@ -9,9 +9,9 @@
 </template>
 
 <script>
-import { signIn, getUserProfile, signOut, fetchGmailEmails,getMessageById } from '@/lib/GmailService'; // Assurez-vous que ces fonctions existent
-import { mapMutations } from 'vuex';
-import { gapi } from "gapi-script";
+import {fetchGmailEmails, getMessageById, getUserProfile, signIn, signOut} from '@/lib/GmailService'; // Assurez-vous que ces fonctions existent
+import {mapMutations} from 'vuex';
+import {gapi} from "gapi-script";
 
 export default {
   data() {
@@ -22,6 +22,7 @@ export default {
   },
   methods: {
     ...mapMutations(['setUser', 'setAccessToken', 'addEmail']), // Importer les mutations nécessaires
+
 
     async handleSignIn() {
       try {
@@ -50,24 +51,56 @@ export default {
 
         // Pour chaque ID, récupérer les détails de l'email et les normaliser
         for (const emailId of emailIds) {
+          try {
+            const emailResponse = await getMessageById(emailId.id); // Utilisation de l'ID de l'email
+            const email = emailResponse.result; // Assurez-vous que le format est correct
 
-          const emailResponse = await getMessageById(emailId.id);
-          console.log(emailResponse)
-          const email = emailResponse.result; // Assurez-vous que le format est correct
+            // Normaliser l'email
+            const headers = email.payload.headers; // Récupérer les en-têtes de l'email
+            const fromHeader = headers.find(header => header.name === 'From')?.value || 'Pas d\'expéditeur';
+            const subjectHeader = headers.find(header => header.name === 'Subject')?.value || 'Pas de sujet';
 
-          // Normaliser l'email
-          const normalizedEmail = {
-            id: email.id,
-            object: email.payload.subject, // Utilisez le champ approprié ici
-            destinataire: email.payload.headers.find(header => header.name === 'To')?.value || 'Pas de destinataire',
-            content: email.snippet || 'Pas de contenu', // Utilisez le champ approprié ici
-            receivedDateTime: email.internalDate, // Assurez-vous que ce champ est présent
-            webLink: `https://mail.google.com/mail/u/0/#inbox/${email.id}`, // URL de l'email
-            userId: this.user.id // ID de l'utilisateur pour l'association
-          };
+            // Conversion de l'heure en format lisible
+            const receivedDateTime = new Date(parseInt(email.internalDate)).toLocaleString();
 
-          // Appeler la mutation addEmail pour ajouter l'email normalisé
-          this.addEmail(normalizedEmail);
+            // Extraire le contenu de l'email, gérer les multiples parties
+            let emailContent = 'Pas de contenu';
+            if (email.payload.parts) {
+              const textPart = email.payload.parts.find(part => part.mimeType === 'text/plain');
+              const htmlPart = email.payload.parts.find(part => part.mimeType === 'text/html');
+              if (textPart) {
+                emailContent = textPart.body.data; // Récupérez le contenu texte
+              } else if (htmlPart) {
+                emailContent = htmlPart.body.data; // Récupérez le contenu HTML
+              }
+            } else if (email.payload.body.data) {
+              emailContent = email.payload.body.data; // Pour les emails avec une seule partie
+            }
+
+            // Affichage du contenu brut avant décodage
+
+            // Décodage du contenu en base64
+            if (emailContent) {
+              emailContent = atob(emailContent.replace(/-/g, '+').replace(/_/g, '/'));
+            }
+
+            console.log("Contenu brut de l'email après décodage :", emailContent);
+
+            const normalizedEmail = {
+              id: email.id,
+              object: subjectHeader, // Utilisation de subjectHeader pour l'objet
+              destinataire: fromHeader, // Utilisation de fromHeader pour le destinataire
+              content: emailContent, // Contenu décodé
+              receivedDateTime: receivedDateTime, // Utilisation de la date convertie
+              webLink: `https://mail.google.com/mail/u/0/#inbox/${email.id}`, // URL de l'email
+              userId: this.user.id // ID de l'utilisateur pour l'association
+            };
+
+            // Appeler la mutation addEmail pour ajouter l'email normalisé
+            this.addEmail(normalizedEmail);
+          } catch (emailError) {
+            console.error(`Erreur lors de la récupération de l'email avec l'ID ${emailId.id} :`, emailError);
+          }
         }
 
       } catch (error) {
