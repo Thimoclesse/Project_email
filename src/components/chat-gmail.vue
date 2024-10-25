@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import {getMessageById, initClient, listMessages, signIn} from '@/GmailService';
+import {getMessageById, initClient, listMessages, signIn} from '@/lib/GmailService';
 
 export default {
   data() {

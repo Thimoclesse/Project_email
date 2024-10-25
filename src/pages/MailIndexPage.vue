@@ -40,10 +40,9 @@
   </div>
 </template>
 
-
 <script>
 import EmailItem from './../components/EmailItem.vue'; // Assurez-vous d'importer le composant
-import { fetchUserEmails } from './../lib/microsoftGraph.js'; // Importez la fonction
+import { fetchUserEmails } from '@/lib/microsoftGraph'; // Importez la fonction
 
 export default {
   name: 'MailIndexPage',
@@ -68,16 +67,16 @@ export default {
         const normalizedEmail = {
           id: email.id,
           subject: email.object, // Utilisation de subject au lieu de object
-          destinataire: email.destinataire,  
-          content: email.content,   
+          destinataire: email.destinataire,
+          content: email.content,
           receivedDateTime: email.receivedDateTime,
           webLink: email.webLink,
           userId: email.userId,
         };
 
-        const matchesTerm = this.searchTerm ? 
-          normalizedEmail.subject.toLowerCase().includes(this.searchTerm.toLowerCase()) || 
-          normalizedEmail.destinataire.toLowerCase().includes(this.searchTerm.toLowerCase()) : true;
+        const matchesTerm = this.searchTerm ?
+            normalizedEmail.subject.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+            normalizedEmail.destinataire.toLowerCase().includes(this.searchTerm.toLowerCase()) : true;
 
         const matchesDate = this.searchDate ? normalizedEmail.receivedDateTime.startsWith(this.searchDate) : true;
 
@@ -101,11 +100,17 @@ export default {
       const accessToken = this.$store.getters.getaccessToken; // Récupérer le token d'accès
       await fetchUserEmails(accessToken); // Appeler la fonction pour récupérer les emails
       console.log('Emails rafraîchis avec succès');
+    },
+    logEmailsToConsole() {
+      console.log('Emails dans le store :', this.userEmails);
     }
+  },
+  mounted() {
+    // Appeler la méthode pour afficher les emails dans la console lors du chargement du composant
+    this.logEmailsToConsole();
   }
 };
 </script>
-
 
 <style scoped>
 /* Style de la barre de recherche */

@@ -4,7 +4,7 @@ export default createStore({
   state: {
     user: null,  // Initialize user as null by default
     emails: [],  // List of normalized emails
-    accessToken: null, // Assurez-vous que accessToken est dans l'état
+    accessToken: null, // Token d'accès
   },
   mutations: {
     setUser(state, user) {
@@ -18,13 +18,17 @@ export default createStore({
       const normalizedEmail = {
         id: email.id,
         object: email.object,
-        destinataire : email.destinataire,  
+        destinataire : email.destinataire,
         content  : email.content,
         receivedDateTime: email.receivedDateTime,
         webLink: email.webLink,
         userId: email.userId,
       };
       state.emails.push(normalizedEmail);  // Add the new normalized email
+    },
+    setEmails(state, emails) {
+      // Remplace tous les emails existants par les nouveaux
+      state.emails = emails;
     },
     deleteEmail(state, emailId) {
       // Remove the email
@@ -44,6 +48,9 @@ export default createStore({
     addEmail({ commit }, email) {
       commit('addEmail', email);  // Call the mutation to add the email
     },
+    setEmails({ commit }, emails) {
+      commit('setEmails', emails); // Appelle la mutation pour définir les emails
+    },
     deleteEmail({ commit }, emailId) {
       commit('deleteEmail', emailId);  // Call the mutation to delete the email
     },
@@ -53,12 +60,10 @@ export default createStore({
   },
   getters: {
     currentUser: state => state.user,
-    getaccessToken: state => state.accessToken,
-
+    getAccessToken: state => state.accessToken,
     userEmails: (state) => {
       return state.emails.filter(email => email.userId === state.user?.id);
     },
-
     getEmailById: (state) => (id) => {
       return state.emails.find(email => email.id === id && email.userId === state.user?.id);
     }
