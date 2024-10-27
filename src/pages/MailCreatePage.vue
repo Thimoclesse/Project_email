@@ -35,9 +35,9 @@ export default {
       const now = new Date();
       const formattedDate = now.toISOString().split('T')[0]; // Date actuelle formatée YYYY-MM-DD
       const formattedTime = now.toTimeString().split(' ')[0].slice(0, 5); // Heure actuelle formatée HH:MM
-      
+
       const currentUser = this.$store.getters.currentUser;  // Récupérer l'utilisateur connecté
-      
+
       if (!currentUser) {
         console.log('Vous devez être connecté pour créer un email.');
         return;
@@ -52,7 +52,7 @@ export default {
         userId: currentUser.id,       // Associer l'email à l'utilisateur connecté
         id: Date.now()
       };
-      
+
       try {
         // Récupérer le token d'accès
         const accessToken = this.$store.getters.getaccessToken;
@@ -64,7 +64,7 @@ export default {
         // Récupérer les emails mis à jour
         const userEmails = await fetchUserEmails(accessToken);
         console.log("Emails récupérés :", userEmails);
-        
+
         // Ajouter l'email au store
         this.$store.dispatch('addEmail', newEmail);
 

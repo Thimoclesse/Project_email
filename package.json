@@ -13,6 +13,8 @@
     "core-js": "^3.8.3",
     "dompurify": "^3.1.7",
     "gapi-script": "^1.2.0",
+    "iconv-lite": "^0.6.3",
+    "link-preview-js": "^3.0.12",
     "vue": "^3.2.13",
     "vue-oauth-microsoft-graph": "file:",
     "vue-router": "^4.4.5",

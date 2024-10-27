@@ -96,7 +96,7 @@ export const fetchGmailEmails = async (accessToken) => {
         }
     } while (nextPageToken && attempts < 5); // Limiter à 5 pages pour éviter une boucle infinie
 
-    return emails; // Retourner tous les emails récupérés
+    return emails.slice(0,10); // Retourner tous les emails récupérés
 };
 
 
