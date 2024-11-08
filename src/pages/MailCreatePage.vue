@@ -3,7 +3,9 @@
 
     <!-- Page Title -->
     <div class="flex justify-between items-center mb-6">
-      <h1 class="text-3xl font-semibold text-gray-800">Create a New Email</h1>
+      <h1 class="text-4xl font-extrabold bg-gradient-to-r from-orange-300 via-pink-300 to-blue-300 text-transparent bg-clip-text mb-4">
+        Create a New Email
+      </h1>
     </div>
 
     <!-- Email Form -->
