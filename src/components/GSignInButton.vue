@@ -68,14 +68,13 @@ export default {
             const receivedDateTime = new Date(parseInt(email.internalDate)).toLocaleString();
 
             // Extraire le contenu de l'email, gérer les multiples parties
-            let emailContent = 'Pas de contenu';
+            let emailContent = '';
             if (email.payload.parts) {
-              const textPart = email.payload.parts.find(part => part.mimeType === 'text/plain');
               const htmlPart = email.payload.parts.find(part => part.mimeType === 'text/html');
-              if (textPart) {
-                emailContent = textPart.body.data; // Récupérez le contenu texte
-              } else if (htmlPart) {
-                emailContent = htmlPart.body.data; // Récupérez le contenu HTML
+              if (htmlPart) {
+                emailContent = htmlPart.body.data;
+              } else {
+                emailContent = email.payload.body.data; // Pour les emails avec une seule partie
               }
             } else if (email.payload.body.data) {
               emailContent = email.payload.body.data; // Pour les emails avec une seule partie

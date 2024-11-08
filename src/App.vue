@@ -23,8 +23,16 @@ export default {
     }
   }
 };
+// main.js ou App.vue
+document.documentElement.setAttribute('data-theme', 'light');
 </script>
 
 <style>
-
+/* Définir des couleurs pour le mode clair */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #ffffff;
+    color: #000000;
+  }
+}
 </style>
