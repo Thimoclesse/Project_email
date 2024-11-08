@@ -3,15 +3,18 @@
     <!-- Header Section (Titres) -->
     <div class="text-left mb-6">
       <h1 class="text-2xl font-semibold text-gray-800">{{ email.object }}</h1>
-      <p class="text-sm text-gray-500 mt-2"><strong>From:</strong> {{ email.from }}</p>
+      <p class="text-sm text-gray-500 mt-2"><strong>From:</strong> {{ email.destinataire }}</p>
       <p class="text-sm text-gray-500"><strong>Date:</strong> {{ email.receivedDateTime }}</p>
     </div>
 
     <!-- Content Section -->
     <div v-if="email && email.content" class="text-left mb-6">
-      <!-- Affichage brut du contenu HTML -->
-      <div v-html="email.content" class="text-gray-700 mt-2 max-w-full">
-      </div>
+      <!-- Affichage forcé du contenu HTML en mode clair -->
+      <div
+          v-html="email.content"
+          class="text-gray-700 mt-2 max-w-full"
+          style="color: #1a202c; background-color: white;"
+      ></div>
       <LinkPreview v-for="(preview, link) in linkPreviews" :key="link" :url="link" :preview="preview" />
     </div>
     <div v-else>
@@ -20,7 +23,8 @@
 
     <!-- Button to Delete Email -->
     <div class="mt-6">
-      <button @click="deleteEmail(email.id)" class="btn btn-error w-full max-w-[10rem]">Delete Email</button>    </div>
+      <button @click="deleteEmail(email.id)" class="btn btn-error w-full max-w-[10rem]">Delete Email</button>
+    </div>
   </div>
 
   <div v-else>
@@ -51,7 +55,9 @@ export default {
   },
 
   mounted() {
-    this.extractLinks(this.email.content);
+    if (this.email && this.email.content) {
+      this.extractLinks(this.email.content);
+    }
   },
 
   methods: {
@@ -82,18 +88,11 @@ export default {
           }
         }
       }
-    },
-
-    formatSize(bytes) {
-      const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-      if (bytes === 0) return '0 B';
-      const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-      if (i === 0) return bytes + ' ' + sizes[i];
-      return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
     }
   }
 };
 </script>
+
 <style scoped>
 /* Pas besoin de styles personnalisés, tout est géré par Tailwind et DaisyUI */
 </style>

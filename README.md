@@ -11,12 +11,17 @@ npm run serve
 ```
 Go to http://localhost:8080/
 
-### Docker run 
-
-````bash
-docker build -t email_projet_image .  
-docker run -p 80:80 -d email_projet_image
-```
+### Creditentials
+#### GMAIL
+username : projet.interface.efrei.2024@gmail.com 
+password : projetinterfaceTheoRom
 
 
-Go to http://localhost/
+#### Microsoft
+username : projet_interface.efrei@outlook.fr
+password : fdv5ZA6vzn8pzNe
+
+
+
+### Warning : 
+Delete and send email is only possible with microsoft, not gmail

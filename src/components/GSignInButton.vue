@@ -62,6 +62,9 @@ export default {
             // Normaliser l'email
             const headers = email.payload.headers; // Récupérer les en-têtes de l'email
             const fromHeader = headers.find(header => header.name === 'From')?.value || 'Pas d\'expéditeur';
+            console.log("Valeur du champ 'From' :", fromHeader); // Ajout d'un log pour inspecter le champ 'From'
+
+
             const subjectHeader = headers.find(header => header.name === 'Subject')?.value || 'Pas de sujet';
 
             // Conversion de l'heure en format lisible
@@ -98,7 +101,6 @@ export default {
               webLink: `https://mail.google.com/mail/u/0/#inbox/${email.id}`, // URL de l'email
               userId: this.user.id // ID de l'utilisateur pour l'association
             };
-
             // Appeler la mutation addEmail pour ajouter l'email normalisé
             this.addEmail(normalizedEmail);
           } catch (emailError) {
