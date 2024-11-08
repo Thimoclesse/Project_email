@@ -1,8 +1,9 @@
 <template>
   <div>
-    <button @click="handleClick" class="sign-in-button">
-      <img src="../assets/microsoft-icon.png" alt="Microsoft Logo" class="icon" />
-      <span>Se connecter avec Microsoft</span>
+    <button @click="handleClick" class="btn-microsoft flex items-center gap-2 p-2 border rounded-full shadow-md hover:shadow-lg">
+      <!-- Icône Microsoft (SVG ou image) -->
+      <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft Logo" class="icon ml-2 ">
+      <span class="text-gray-700 font-medium mr-2">Se connecter avec Microsoft</span>
     </button>
 
     <!-- Afficher le token d'accès pour vérification -->
@@ -10,6 +11,7 @@
       <p>Token d'accès : {{ accessToken }}</p>
     </div>
 
+    <!-- Liste des emails de l'utilisateur -->
     <div v-if="userEmails && userEmails.length">
       <h3>Vos Emails :</h3>
       <ul>
@@ -17,7 +19,7 @@
           <a :href="email.webLink" target="_blank">{{ email.object }}</a>
           <p>De: {{ email.destinataire }}</p>
           <p>Date: {{ new Date(email.receivedDateTime).toLocaleString() }}</p>
-          <button @click="deleteEmail(email.id)">Supprimer</button>
+          <button @click="deleteEmail(email.id)" class="btn bg-red-500 text-white hover:bg-red-600">Supprimer</button>
         </li>
       </ul>
     </div>

@@ -1,10 +1,14 @@
 <template>
   <div v-if="loggedIn">
     <h2 v-if="user && user.name">Bienvenue, {{ user.name }}!</h2>
-    <button @click="logout">Se déconnecter</button>
+    <button @click="logout" class="btn bg-red-500 text-white hover:bg-red-600">Se déconnecter</button>
   </div>
   <div v-else>
-    <button @click="handleSignIn">Se connecter avec Google</button>
+    <button @click="handleSignIn" class="btn-google flex items-center gap-2 p-2 border rounded-full shadow-md hover:shadow-lg">
+      <!-- Icône Google (SVG) -->
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="w-6 h-6">
+      <span class="text-gray-700 font-medium">Se connecter avec Google</span>
+    </button>
   </div>
 </template>
 
