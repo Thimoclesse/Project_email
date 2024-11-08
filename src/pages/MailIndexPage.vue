@@ -1,39 +1,63 @@
 <template>
-  <div>
-    <h1>Vos Emails</h1>
+  <div class="min-h-screen bg-gray-100 p-6">
 
-    <!-- Bouton d'actualisation -->
-    <button @click="refreshEmails" class="refresh-button">Actualiser</button>
+    <!-- Conteneur avec Flexbox pour aligner les éléments sur la même ligne -->
+    <div class="flex justify-between items-center mb-6">
+      <!-- Page Title -->
+      <h1 class="text-4xl font-extrabold bg-gradient-to-r from-orange-300 via-pink-300 to-blue-300 text-transparent bg-clip-text mb-4">Your Emails</h1>
 
-    <!-- Barre de recherche -->
-    <div class="search-bar">
-      <label for="search">Rechercher des emails :</label>
-      <input type="text" v-model="searchTerm" placeholder="Par expéditeur ou mot-clé" class="search-input"/>
-      <label for="date">Date :</label>
-      <input type="date" v-model="searchDate" class="date-input"/>
+
+      <!-- Refresh Button -->
+      <button @click="refreshEmails" class="bg-gradient-to-r from-blue-300 to-teal-400 text-white font-semibold py-2 px-6 rounded-lg hover:from-blue-500 hover:to-teal-600 transition-all duration-300">Refresh</button>
     </div>
 
-    <!-- Sélecteur de nombre d'emails à afficher -->
-    <div class="limit-selector">
-      <label for="limit">Nombre d'emails à afficher :</label>
-      <select v-model="emailLimit" class="limit-select">
+    <!-- Search Bar -->
+    <div class="flex gap-4 mb-6">
+      <div class="flex items-center space-x-2">
+        <label for="search" class="text-lg font-medium text-gray-700">Search:</label>
+        <input
+            type="text"
+            v-model="searchTerm"
+            placeholder="By sender or keyword"
+            class="input input-bordered w-64 text-gray-700"
+        />
+      </div>
+      <div class="flex items-center space-x-2">
+        <label for="date" class="text-lg font-medium text-gray-700">Date:</label>
+        <input
+            type="date"
+            v-model="searchDate"
+            class="input input-bordered text-gray-700"
+        />
+      </div>
+    </div>
+
+    <!-- Email Display Limit Selector -->
+    <div class="mb-6">
+      <label for="limit" class="text-lg font-medium text-gray-700">Number of emails to display:</label>
+      <select v-model="emailLimit" class="select select-bordered text-gray-700">
         <option v-for="limit in limits" :key="limit" :value="limit">{{ limit }}</option>
       </select>
     </div>
 
-    <!-- En-tête des colonnes -->
-    <div class="email-header">
-      <div class="header-item">Destinataire</div>
-      <div class="header-item">Objet</div>
-      <div class="header-item">Aperçu</div>
-      <div class="header-item">Date - Heure</div>
+    <!-- Column Headers -->
+    <div class="grid grid-cols-3 w-full text-sm font-semibold text-gray-600 bg-gray-200 p-3 rounded-lg mb-4">
+      <!-- Recipient aligned left -->
+      <div class="justify-start text-left ml-4">Recipient</div>
+
+      <!-- Subject aligned center -->
+      <div class="justify-center text-center">Subject</div>
+
+      <!-- Date-Time aligned right -->
+      <div class="justify-end text-right mr-4">Date - Time</div>
     </div>
 
-    <!-- Vérification si des emails sont trouvés -->
-    <div v-if="limitedEmails.length === 0" class="no-emails">
-      Aucun email trouvé.
+    <!-- Check if no emails are found -->
+    <div v-if="limitedEmails.length === 0" class="text-center text-red-600 mb-6">
+      No emails found.
     </div>
 
+    <!-- List of Emails -->
     <div v-for="email in limitedEmails" :key="email.id">
       <EmailItem :email="email" @delete-email="handleDeleteEmail" />
     </div>
@@ -41,8 +65,8 @@
 </template>
 
 <script>
-import EmailItem from './../components/EmailItem.vue'; // Assurez-vous d'importer le composant
-import { fetchUserEmails } from '@/lib/microsoftGraph'; // Importez la fonction
+import EmailItem from './../components/EmailItem.vue'; // Import EmailItem component
+import { fetchUserEmails } from '@/lib/microsoftGraph'; // Import email fetching function
 
 export default {
   name: 'MailIndexPage',
@@ -51,22 +75,22 @@ export default {
   },
   data() {
     return {
-      searchTerm: '',  // Mot-clé de recherche
-      searchDate: '',  // Date de recherche
-      emailLimit: 5,   // Limite par défaut d'emails à afficher
-      limits: [5, 10, 15, 20] // Options pour le nombre d'emails à afficher
+      searchTerm: '',  // Search term
+      searchDate: '',  // Search date
+      emailLimit: 5,   // Default limit of emails to show
+      limits: [5, 10, 15, 20] // Options for number of emails to show
     };
   },
   computed: {
     userEmails() {
-      return this.$store.getters.userEmails;  // Récupérer les emails de l'utilisateur connecté
+      return this.$store.getters.userEmails;  // Get logged-in user's emails from store
     },
     filteredEmails() {
-      // Filtrer les emails selon le terme de recherche et la date
+      // Filter emails based on search term and date
       const filtered = this.userEmails.filter(email => {
         const normalizedEmail = {
           id: email.id,
-          subject: email.object, // Utilisation de subject au lieu de object
+          subject: email.object, // Using subject instead of object
           destinataire: email.destinataire,
           content: email.content,
           receivedDateTime: email.receivedDateTime,
@@ -80,125 +104,38 @@ export default {
 
         const matchesDate = this.searchDate ? normalizedEmail.receivedDateTime.startsWith(this.searchDate) : true;
 
-        return matchesTerm && matchesDate; // Retourner vrai si les deux conditions sont satisfaites
+        return matchesTerm && matchesDate; // Return true if both conditions are met
       });
 
-      // Trier les emails du plus récent au plus ancien
+      // Sort emails from most recent to oldest
       return filtered.sort((a, b) => new Date(b.receivedDateTime) - new Date(a.receivedDateTime));
     },
     limitedEmails() {
-      // Limiter le nombre d'emails affichés
+      // Limit the number of emails shown
       return this.filteredEmails.slice(0, this.emailLimit);
     }
   },
   methods: {
     handleDeleteEmail(emailId) {
-      // Ici, vous pouvez appeler une action Vuex pour supprimer l'email, ou le supprimer directement
-      this.$store.dispatch('deleteEmail', emailId); // Assurez-vous que cette action existe
+      // Here, you can call a Vuex action to delete the email, or delete it directly
+      this.$store.dispatch('deleteEmail', emailId); // Make sure this action exists
     },
     async refreshEmails() {
-      const accessToken = this.$store.getters.getaccessToken; // Récupérer le token d'accès
-      await fetchUserEmails(accessToken); // Appeler la fonction pour récupérer les emails
-      console.log('Emails rafraîchis avec succès');
+      const accessToken = this.$store.getters.getaccessToken; // Get access token
+      await fetchUserEmails(accessToken); // Call function to fetch emails
+      console.log('Emails refreshed successfully');
     },
     logEmailsToConsole() {
-      console.log('Emails dans le store :', this.userEmails);
+      console.log('Emails in store:', this.userEmails);
     }
   },
   mounted() {
-    // Appeler la méthode pour afficher les emails dans la console lors du chargement du composant
+    // Log emails to console when the component mounts
     this.logEmailsToConsole();
   }
 };
 </script>
 
 <style scoped>
-/* Style de la barre de recherche */
-.search-bar {
-  margin-bottom: 1rem; /* Marge inférieure pour l'espacement */
-}
-
-.search-bar label {
-  margin-right: 0.5rem; /* Espacement entre l'étiquette et l'input */
-}
-
-.search-input, .date-input {
-  padding: 0.5rem; /* Espacement intérieur */
-  margin-right: 1rem; /* Espacement entre les champs */
-  border-radius: 0.5rem; /* Coins arrondis */
-  border: 1px solid #ccc; /* Bordure légère */
-  width: 200px; /* Largeur fixe */
-}
-
-.search-input:focus, .date-input:focus {
-  border-color: orange; /* Changer la couleur de la bordure au focus */
-}
-
-/* Style du sélecteur de nombre d'emails */
-.limit-selector {
-  margin-bottom: 1rem; /* Marge inférieure pour l'espacement */
-}
-
-.limit-select {
-  padding: 0.5rem; /* Espacement intérieur */
-  border-radius: 0.5rem; /* Coins arrondis */
-  border: 1px solid #ccc; /* Bordure légère */
-  margin-left: 0.5rem; /* Espacement entre le label et le select */
-}
-
-.limit-select:focus {
-  border-color: orange; /* Changer la couleur de la bordure au focus */
-}
-
-/* Style des éléments d'email */
-.email-item {
-  display: block;  /* Permet à chaque mail d'être sur une nouvelle ligne */
-  margin: 1rem 0; /* Marge verticale pour l'espacement entre les emails */
-  color: white;
-  background-color: orange;
-  padding: 0.7rem;
-  border-radius: 0.5rem;
-  text-decoration: none;
-}
-
-/* Style de l'en-tête des emails */
-.email-header {
-  display: flex; /* Utilisation de flexbox pour l'alignement */
-  justify-content: space-between; /* Espace entre les éléments */
-  font-weight: bold; /* Mettre les en-têtes en gras */
-  color: white; /* Couleur du texte */
-  background-color: orange; /* Couleur d'arrière-plan des en-têtes */
-  padding: 0.5rem; /* Ajout de padding pour un meilleur espacement */
-  border-radius: 0.5rem; /* Coins arrondis pour les en-têtes */
-  margin-bottom: 1rem; /* Espacement en bas */
-}
-
-.header-item {
-  flex: 1; /* Prendre une largeur égale pour chaque en-tête */
-  text-align: center; /* Centrer le texte */
-}
-
-/* Style du message lorsqu'aucun email n'est trouvé */
-.no-emails {
-  color: red; /* Couleur du texte */
-  background-color: orange; /* Couleur d'arrière-plan */
-  padding: 0.5rem; /* Espacement intérieur */
-  border-radius: 0.5rem; /* Coins arrondis */
-  text-align: center; /* Centrer le texte */
-  margin: 1rem 0; /* Marge pour l'espacement */
-}
-
-.refresh-button {
-  padding: 0.5rem;
-  background-color: orange;
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  margin-bottom: 1rem; /* Espacement sous le bouton */
-}
-
-.refresh-button:hover {
-  background-color: darkorange; /* Changer la couleur au survol */
-}
+/* No additional CSS needed thanks to Tailwind and DaisyUI */
 </style>

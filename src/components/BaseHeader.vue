@@ -10,12 +10,12 @@
       <div v-if="user" class="flex gap-6 ml-8">
         <!-- Bouton "Show your email" avec dégradé bleu et vert océan -->
         <button class="bg-gradient-to-r from-blue-300 to-teal-400 text-white font-semibold py-2 px-6 rounded-lg hover:from-blue-500 hover:to-teal-600 transition-all duration-300">
-          <router-link to="/mail" class="mail-link">Show your email</router-link>
+          <router-link to="/mail" class="mail-link">My emails</router-link>
         </button>
 
         <!-- Bouton "Create email" avec dégradé orange et rose -->
         <button class="bg-gradient-to-r from-orange-300 to-pink-300 text-white font-semibold py-2 px-6 rounded-lg hover:from-orange-500 hover:to-pink-500 transition-all duration-300">
-          <router-link to="/create" class="mail-link">Create email</router-link>
+          <router-link to="/create" class="mail-link">Send email</router-link>
         </button>
       </div>
 
